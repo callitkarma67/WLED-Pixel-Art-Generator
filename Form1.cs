@@ -1,21 +1,40 @@
+using WLED_Pixel_Art_Generator.api;
+using WLED_Pixel_Art_Generator.util;
+
 namespace WLED_Pixel_Art_Generator
 {
     public partial class Form1 : Form
     {
+        public static Form1 Instance;
+        private bool _presetSaved;
+
         private Bitmap _imageBitmap;
         private List<GridPixel> _gridPixelList = new List<GridPixel>();
         private bool _useHex;
         private bool _serpentine;
         private bool _includeOnBright;
         private string _brightness;
+        private string _wledUrl;
         public Form1()
         {
             InitializeComponent();
+            Instance= this;
             generateBtn.Enabled = false;
+            LoadData();
             _useHex = hexCheckBox.Checked;
             _serpentine = serpCheckBox.Checked;
-            brightText.Text = "25";
-            _brightness = brightText.Text;
+            _includeOnBright = onBrightCheckbox.Checked;
+        }
+
+        private void LoadData()
+        {
+            AppSaveData data = AppDataUtil.LoadSaveData();
+            _wledUrl = data.WledIp;
+            hexCheckBox.Checked = data.UseHex;
+            onBrightCheckbox.Checked = data.UseOnBright;
+            serpCheckBox.Checked = data.Serpentine;
+            brightText.Text = data.Brightness.ToString();
+
         }
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -25,9 +44,10 @@ namespace WLED_Pixel_Art_Generator
 
         private void selectFileBtn_Click(object sender, EventArgs e)
         {
+            string picsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             openFileDialog1 = new OpenFileDialog()
             {
-                InitialDirectory = @"C:\",
+                InitialDirectory = picsDir,
                 Title = "Select Image File",
 
                 CheckFileExists = true,
@@ -127,6 +147,9 @@ namespace WLED_Pixel_Art_Generator
 
             ConsolidateAndOutput();
             generateBtn.Enabled = false;
+            postBtn.Visible = true;
+            savePresetBtn.Visible= true;
+            wledOffBtn.Visible = true;
         }
 
         private string ConvertToHex(Color color)
@@ -136,10 +159,11 @@ namespace WLED_Pixel_Art_Generator
 
         private void SetupMatrix(int current, Color pixel)
         {
-            GridPixel gridPixel = new GridPixel();
-            
-            gridPixel.id = current;
-            gridPixel.hexCode = ConvertToHex(pixel);
+            GridPixel gridPixel = new GridPixel
+            {
+                id = current,
+                hexCode = ConvertToHex(pixel)
+            };
 
             _gridPixelList.Add(gridPixel);
         }
@@ -259,6 +283,11 @@ namespace WLED_Pixel_Art_Generator
             _includeOnBright = onBrightCheckbox.Checked;
             brightLabel.Visible = false;
             brightText.Visible = false;
+            postBtn.Visible = false;
+            wledOffBtn.Visible = false;
+            savePresetBtn.Visible= false;
+            SetPresetSaved(false);
+            LoadData();
         }
 
         private void hexCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -274,13 +303,7 @@ namespace WLED_Pixel_Art_Generator
 
         private void serpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (serpCheckBox.Checked)
-            {
-                _serpentine = true;
-            } else
-            {
-                _serpentine= false;
-            }
+            _serpentine = serpCheckBox.Checked;
         }
 
         private void onBrightCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -307,6 +330,45 @@ namespace WLED_Pixel_Art_Generator
             }
             _brightness = brightText.Text;
         }
+
+        private void postBtn_Click(object sender, EventArgs e)
+        {
+            WledJsonApiClient wled = new WledJsonApiClient(_wledUrl);
+            wled.postToWled(resultTextBox.Text);
+        }
+
+        private void wledOffBtn_Click(object sender, EventArgs e)
+        {
+            WledJsonApiClient wled = new WledJsonApiClient(_wledUrl);
+            wled.wledOff();
+        }
+
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm settings = new SettingsForm();
+            settings.Show();
+        }
+
+        private void savePresetBtn_Click(object sender, EventArgs e)
+        {
+            SavePresetForm savePresetForm = new SavePresetForm();
+            savePresetForm.PresetJson = resultTextBox.Text;
+            savePresetForm.Show();
+        }
+
+        public void SetPresetSaved(bool saved)
+        {
+            _presetSaved = saved;
+
+            savePresetBtn.Enabled = !_presetSaved;
+        }
+
+        public void SetUrl(string url)
+        {
+            _wledUrl= url;
+        }
+
+        public string Url => _wledUrl;
     }
 }
 
