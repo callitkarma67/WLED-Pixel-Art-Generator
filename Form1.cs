@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using WLED_Pixel_Art_Generator.api;
 using WLED_Pixel_Art_Generator.util;
 
@@ -13,8 +14,10 @@ namespace WLED_Pixel_Art_Generator
         private bool _useHex;
         private bool _serpentine;
         private bool _includeOnBright;
+        private bool _pythonTab;
         private string _brightness;
         private string _wledUrl;
+        private string _uploadedImageName;
         public Form1()
         {
             InitializeComponent();
@@ -24,6 +27,8 @@ namespace WLED_Pixel_Art_Generator
             _useHex = hexCheckBox.Checked;
             _serpentine = serpCheckBox.Checked;
             _includeOnBright = onBrightCheckbox.Checked;
+            _pythonTab = enablePythonModeToolStripMenuItem.Checked;
+            ShowPythonTab(_pythonTab);
         }
 
         private void LoadData()
@@ -34,7 +39,7 @@ namespace WLED_Pixel_Art_Generator
             onBrightCheckbox.Checked = data.UseOnBright;
             serpCheckBox.Checked = data.Serpentine;
             brightText.Text = data.Brightness.ToString();
-
+            enablePythonModeToolStripMenuItem.Checked = data.UsePython;
         }
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -49,7 +54,7 @@ namespace WLED_Pixel_Art_Generator
             {
                 InitialDirectory = picsDir,
                 Title = "Select Image File",
-
+                RestoreDirectory= true,
                 CheckFileExists = true,
                 CheckPathExists = true,
                 DefaultExt = "png",
@@ -62,30 +67,53 @@ namespace WLED_Pixel_Art_Generator
             {
                 try
                 {
-                    imageBox.Height = 16;
-                    imageBox.Width = 16;
-
-                    Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-
-                    Bitmap bitmap = new Bitmap(openFileDialog1.FileName);
-                    _imageBitmap = bitmap;
-
-                    if (!validImage(_imageBitmap))
-                    {
-                        MessageBox.Show("Sorry, only images that are 16 x 16px are supported at this time.");
-                        return;
-                    }
-                    Image uploadedImage = bitmap.GetThumbnailImage(16, 16, myCallback, IntPtr.Zero);
-
-                    imageBox.Image = uploadedImage;
-                    generateBtn.Enabled = true;
-                    selectFileBtn.Enabled = false;
+                    HandleImageSelection();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
                 }
             }
+        }
+
+        private void HandleImageSelection()
+        {
+            imageBox.Height = 16;
+            imageBox.Width = 16;
+
+            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+
+            Bitmap bitmap = new Bitmap(openFileDialog1.FileName);
+            _uploadedImageName = openFileDialog1.SafeFileName;
+            _imageBitmap = bitmap;
+
+            if (!validImage(_imageBitmap))
+            {
+                MessageBox.Show("Sorry, only images that are 16 x 16px are supported at this time.");
+                return;
+            }
+            Image uploadedImage = bitmap.GetThumbnailImage(16, 16, myCallback, IntPtr.Zero);
+
+            imageBox.Image = uploadedImage;
+
+            generateBtn.Enabled = true;
+            selectFileBtn.Enabled = false;
+        }
+
+        private void AddBulkImages(string fileName)
+        {
+            _uploadedImageName = Path.GetFileName(fileName);
+            Bitmap bitmap= new Bitmap(fileName);
+            _imageBitmap = bitmap;
+
+            if (!validImage(_imageBitmap))
+            {
+                MessageBox.Show("Sorry, only images that are 16 x 16px are supported at this time.");
+                return;
+            }
+            Generate();
+            SendToPythonGenerator();
+            ResetForBulk();
         }
 
         public bool ThumbnailCallback()
@@ -102,6 +130,23 @@ namespace WLED_Pixel_Art_Generator
         {
             Image image = imageBox.Image;
 
+            Generate();
+            
+            // DEBUG Only.
+            //foreach (var pixel in _gridPixelList.OrderBy(p => p.id))
+            //{
+            //    System.Diagnostics.Debug.WriteLine(pixel.id + " : " + pixel.hexCode);
+            //}
+
+            
+            generateBtn.Enabled = false;
+            postBtn.Visible = true;
+            savePresetBtn.Visible= true;
+            wledOffBtn.Visible = true;
+        }
+
+        private void Generate()
+        {
             int counter = 0;
 
             if (_serpentine)
@@ -115,7 +160,8 @@ namespace WLED_Pixel_Art_Generator
                         counter++;
                     }
                 }
-            } else
+            }
+            else
             {
                 for (int i = 0; i < _imageBitmap.Width; i++)
                 {
@@ -127,7 +173,8 @@ namespace WLED_Pixel_Art_Generator
                             SetupMatrix(counter, pixel);
                             counter++;
                         }
-                    } else
+                    }
+                    else
                     {
                         for (int j = 15; j >= 0; j--)
                         {
@@ -138,18 +185,8 @@ namespace WLED_Pixel_Art_Generator
                     }
                 }
             }
-            
-            // DEBUG Only.
-            //foreach (var pixel in _gridPixelList.OrderBy(p => p.id))
-            //{
-            //    System.Diagnostics.Debug.WriteLine(pixel.id + " : " + pixel.hexCode);
-            //}
 
             ConsolidateAndOutput();
-            generateBtn.Enabled = false;
-            postBtn.Visible = true;
-            savePresetBtn.Visible= true;
-            wledOffBtn.Visible = true;
         }
 
         private string ConvertToHex(Color color)
@@ -267,7 +304,25 @@ namespace WLED_Pixel_Art_Generator
             resultTextBox.Text = output;
         }
 
+        private void SendToPythonGenerator()
+        {
+            string variableName = Regex.Replace(_uploadedImageName, "\\.\\w{3,}$", "");
+            pythonOutputText.Text += $"{variableName} = {resultTextBox.Text.Replace("\"on\":true", "\"on\":True")}{Environment.NewLine}";
+        }
+
         private void resetBtn_Click(object sender, EventArgs e)
+        {
+            ResetMainForm();
+        }
+
+        private void ResetForBulk()
+        {
+            _imageBitmap = null;
+            _gridPixelList = new List<GridPixel>();
+            imageBox.Image = null;
+        }
+
+        private void ResetMainForm()
         {
             resultTextBox.Clear();
             generateBtn.Enabled = false;
@@ -285,9 +340,15 @@ namespace WLED_Pixel_Art_Generator
             brightText.Visible = false;
             postBtn.Visible = false;
             wledOffBtn.Visible = false;
-            savePresetBtn.Visible= false;
+            savePresetBtn.Visible = false;
             SetPresetSaved(false);
             LoadData();
+        }
+
+        private void ResetPythonTab()
+        {
+            pythonOutputText.Text = "";
+            pythonTabBulkBtn.Enabled = true;
         }
 
         private void hexCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -346,6 +407,7 @@ namespace WLED_Pixel_Art_Generator
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SettingsForm settings = new SettingsForm();
+            settings.SetUrlFromSave(_wledUrl);
             settings.Show();
         }
 
@@ -368,7 +430,81 @@ namespace WLED_Pixel_Art_Generator
             _wledUrl= url;
         }
 
+        private void ShowPythonTab(bool visible)
+        {
+            if (visible)
+            {
+                if (!tabControl1.TabPages.ContainsKey("pythonTab"))
+                    tabControl1.TabPages.Add(pythonTab);
+            } else
+            {
+                tabControl1.TabPages.Remove(pythonTab);
+            }
+            pythonTab.Visible = visible;
+        }
+
         public string Url => _wledUrl;
+
+        private void enablePythonModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _pythonTab = enablePythonModeToolStripMenuItem.Checked;
+            AppSaveData data = AppDataUtil.LoadSaveData();
+            data.UsePython = _pythonTab;
+            AppDataUtil.SaveData(data);
+            ShowPythonTab(_pythonTab);
+        }
+
+        private void pythonTabBulkBtn_Click(object sender, EventArgs e)
+        {
+            string picsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            pythonOpenFilesDialog = new OpenFileDialog()
+            {
+                InitialDirectory = picsDir,
+                Title = "Select Image File",
+                Multiselect= true,
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "png",
+                Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG,*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF|" + "All files (*.*)|*.*",
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            
+
+            if (pythonOpenFilesDialog.ShowDialog() == DialogResult.OK)
+            {
+                pythonTabBulkBtn.Enabled = false;
+                try
+                {
+                    for (int i = 0; i < pythonOpenFilesDialog.FileNames.Length; i++)
+                    {
+                        AddBulkImages(pythonOpenFilesDialog.FileNames[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+        private void pythonTabResetBtn_Click(object sender, EventArgs e)
+        {
+            ResetPythonTab();
+        }
+
+        private void resetAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var msg = MessageBox.Show("Are you sure you want to reset ALL tabs? This cannot be undone.", "Reset All", MessageBoxButtons.YesNo);
+
+            if (msg == DialogResult.Yes)
+            {
+                ResetPythonTab();
+                ResetMainForm();
+            }
+        }
     }
 }
 

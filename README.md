@@ -22,9 +22,14 @@ The code is surely a bit messy and can probably be optimized in over a thousand 
 2) Save As Preset - This feature is in very early beta, you absolutely MUST have presets (an actual json object) in `{WLED-IP}/edit` under `presets.json` in order for this to work. For best results, ensure that you have the 'Include On/Bri elements' enabled so that your preset API command will turn on your LEDs. This will add your newly generated pixel art JSON as a preset in your WLED. See 'Persistent Settings' for details, but your presets.json will be saved and your existing presets.json will be saved in a .BAK file. When you click this, you will be prompted to enter a Preset name. Click Save to add this preset to your WLED presets. If you want to manually backup your presets, you can click the 'Load WLED Presets' button and it will save it as a file called `presets_manual_backup.json`.
 3) File Menu contains a settings section to save default settings going forward. This is where you can set your IP/URL to your WLED controller. Make sure this is set if you wish to use the Save as Preset, Post to WLED, or WLED Off features, otherwise it obviously won't be able to connect.
 4) Post to WLED - you can immediately send your pixel art to your WLED to preview it. Note that your WLED will stay on with the pixel art until you click WLED Off.
+5) Options Menu - **[Reset All]** will clear all fields within the application, but will NOT delete your save data. **[Enable Python Mode]** will create a new tab for Python generation. This tab will allow you to bulk import image files which in turn will populate the box on this tab with python variables with values of the JSON to be posted for each specific image. Just like the main tab, this requires 16x16px images. It takes the file names of the image files and uses them as the variable names so name accordingly. For example, if you upload 2 images called `sprite1.png` and `sprite2.png`, the output will be two valid python dictionary variables as below. The output is based on your settings for on/bright inclusion. This also will automatically convert the lower case true into True as Python requires. **Note** that the box length may max out, I was able to upload 62 images at once and I had no issues with losing text/getting truncated.
+```python
+sprite1 = {"on":True,"bri":100....} #etc...
+sprite2 = {"on":True,"bri":100....} #etc...
+```
 
 ## Persistent Settings
-You can now save basic settings; such as your WLED IP/URL and the aforementioned settings. This save file is created in your Documents folder inside a folder called 'WLED_Pixel_Art_Generator'.  
+You can now save basic settings; such as your WLED IP/URL and the aforementioned settings, this also includes your selection of using Python Mode. This save file is created in your Documents folder inside a folder called 'WLED_Pixel_Art_Generator'.  
 
 The app will also save your presets from the WLED API and back them up if you save the current pixel art to your presets. These are stored in the same directory as the settings.
 

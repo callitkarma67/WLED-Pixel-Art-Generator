@@ -1,0 +1,15 @@
+v0.6.0 [beta]
+- Added (Optional) Python Mode (Enable in Options Menu) - allows you to create python dictionary variables for your pixel art for use in python via requests. This automatically converts 'true' into 'True' as Python requires.
+- Python Mode supports multiple image uploads. 
+- README Updated
+- General QOL/UX Fixes
+
+v0.5.0 [beta]
+- Added Persistent Settings
+- Added Preset saving
+- Added ability to post directly to your WLED Controller. You can directly send generated JSON (image) to the WLED from within the application. You can also power off your LEDs from the application.
+- README Updated
+- General QOL/UX Fixes
+
+v0.0.1 [pre]
+- Initial Release

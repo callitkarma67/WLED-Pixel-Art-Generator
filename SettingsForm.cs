@@ -55,6 +55,11 @@ namespace WLED_Pixel_Art_Generator
                 return;
             }
         }
+
+        public void SetUrlFromSave(string url)
+        {
+            settingsUrlText.Text = url;
+        }
     }
 
     [Serializable]
@@ -65,5 +70,6 @@ namespace WLED_Pixel_Art_Generator
         public bool Serpentine;
         public bool UseOnBright;
         public int Brightness;
+        public bool UsePython;
     }
 }

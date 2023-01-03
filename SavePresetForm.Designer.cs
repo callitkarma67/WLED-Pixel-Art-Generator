@@ -77,7 +77,7 @@
             this.savePresetLoadBtn.Name = "savePresetLoadBtn";
             this.savePresetLoadBtn.Size = new System.Drawing.Size(383, 52);
             this.savePresetLoadBtn.TabIndex = 4;
-            this.savePresetLoadBtn.Text = "Load WLED Presets";
+            this.savePresetLoadBtn.Text = "Fetch WLED Presets";
             this.savePresetLoadBtn.UseVisualStyleBackColor = true;
             this.savePresetLoadBtn.Click += new System.EventHandler(this.savePresetLoadBtn_Click);
             // 
