@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using WLED_Pixel_Art_Generator.api;
+using WLED_Pixel_Art_Generator.forms;
 using WLED_Pixel_Art_Generator.util;
 
 namespace WLED_Pixel_Art_Generator
@@ -7,6 +8,7 @@ namespace WLED_Pixel_Art_Generator
     public partial class Form1 : Form
     {
         public static Form1 Instance;
+        public string VersionNumber = "v0.6.1-b";
         private bool _presetSaved;
 
         private Bitmap _imageBitmap;
@@ -407,7 +409,6 @@ namespace WLED_Pixel_Art_Generator
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SettingsForm settings = new SettingsForm();
-            settings.SetUrlFromSave(_wledUrl);
             settings.Show();
         }
 
@@ -504,6 +505,12 @@ namespace WLED_Pixel_Art_Generator
                 ResetPythonTab();
                 ResetMainForm();
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HelpForm helpForm= new HelpForm();
+            helpForm.Show();
         }
     }
 }

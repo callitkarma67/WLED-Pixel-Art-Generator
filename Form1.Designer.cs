@@ -54,12 +54,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.resultTextBox = new System.Windows.Forms.TextBox();
             this.pythonTab = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.pythonTabResetBtn = new System.Windows.Forms.Button();
             this.pythonTabBulkBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.pythonOutputText = new System.Windows.Forms.TextBox();
             this.pythonOpenFilesDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label3 = new System.Windows.Forms.Label();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -77,10 +79,12 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(36, 36);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1714, 45);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -90,20 +94,20 @@
             this.preferencesToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(80, 41);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 22);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(262, 48);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.preferencesToolStripMenuItem.Text = "Settings";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(262, 48);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // optionsToolStripMenuItem
@@ -113,14 +117,14 @@
             this.enableHomeAssistantToolStripMenuItem,
             this.resetAllToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(133, 41);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // enablePythonModeToolStripMenuItem
             // 
             this.enablePythonModeToolStripMenuItem.CheckOnClick = true;
             this.enablePythonModeToolStripMenuItem.Name = "enablePythonModeToolStripMenuItem";
-            this.enablePythonModeToolStripMenuItem.Size = new System.Drawing.Size(437, 48);
+            this.enablePythonModeToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.enablePythonModeToolStripMenuItem.Text = "Enable Python Mode";
             this.enablePythonModeToolStripMenuItem.Click += new System.EventHandler(this.enablePythonModeToolStripMenuItem_Click);
             // 
@@ -129,14 +133,14 @@
             this.enableHomeAssistantToolStripMenuItem.CheckOnClick = true;
             this.enableHomeAssistantToolStripMenuItem.Enabled = false;
             this.enableHomeAssistantToolStripMenuItem.Name = "enableHomeAssistantToolStripMenuItem";
-            this.enableHomeAssistantToolStripMenuItem.Size = new System.Drawing.Size(437, 48);
+            this.enableHomeAssistantToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.enableHomeAssistantToolStripMenuItem.Text = "Enable Home Assistant";
             this.enableHomeAssistantToolStripMenuItem.Visible = false;
             // 
             // resetAllToolStripMenuItem
             // 
             this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
-            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(437, 48);
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.resetAllToolStripMenuItem.Text = "Reset All";
             this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.resetAllToolStripMenuItem_Click);
             // 
@@ -144,10 +148,11 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.pythonTab);
-            this.tabControl1.Location = new System.Drawing.Point(12, 48);
+            this.tabControl1.Location = new System.Drawing.Point(0, 25);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1702, 1189);
+            this.tabControl1.Size = new System.Drawing.Size(800, 527);
             this.tabControl1.TabIndex = 15;
             // 
             // tabPage1
@@ -166,19 +171,21 @@
             this.tabPage1.Controls.Add(this.selectFileBtn);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.resultTextBox);
-            this.tabPage1.Location = new System.Drawing.Point(10, 55);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(1);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1682, 1124);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(1);
+            this.tabPage1.Size = new System.Drawing.Size(792, 499);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // wledOffBtn
             // 
-            this.wledOffBtn.Location = new System.Drawing.Point(650, 1042);
+            this.wledOffBtn.Location = new System.Drawing.Point(303, 422);
+            this.wledOffBtn.Margin = new System.Windows.Forms.Padding(1);
             this.wledOffBtn.Name = "wledOffBtn";
-            this.wledOffBtn.Size = new System.Drawing.Size(169, 52);
+            this.wledOffBtn.Size = new System.Drawing.Size(79, 21);
             this.wledOffBtn.TabIndex = 27;
             this.wledOffBtn.Text = "WLED Off";
             this.wledOffBtn.UseVisualStyleBackColor = true;
@@ -187,9 +194,10 @@
             // 
             // postBtn
             // 
-            this.postBtn.Location = new System.Drawing.Point(868, 1042);
+            this.postBtn.Location = new System.Drawing.Point(405, 422);
+            this.postBtn.Margin = new System.Windows.Forms.Padding(1);
             this.postBtn.Name = "postBtn";
-            this.postBtn.Size = new System.Drawing.Size(197, 52);
+            this.postBtn.Size = new System.Drawing.Size(92, 21);
             this.postBtn.TabIndex = 26;
             this.postBtn.Text = "Post to WLED";
             this.postBtn.UseVisualStyleBackColor = true;
@@ -198,11 +206,10 @@
             // 
             // brightText
             // 
-            this.brightText.Location = new System.Drawing.Point(1291, 218);
-            this.brightText.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.brightText.Location = new System.Drawing.Point(602, 88);
             this.brightText.MaxLength = 3;
             this.brightText.Name = "brightText";
-            this.brightText.Size = new System.Drawing.Size(139, 43);
+            this.brightText.Size = new System.Drawing.Size(67, 23);
             this.brightText.TabIndex = 25;
             this.brightText.Visible = false;
             this.brightText.TextChanged += new System.EventHandler(this.brightText_TextChanged);
@@ -210,10 +217,9 @@
             // brightLabel
             // 
             this.brightLabel.AutoSize = true;
-            this.brightLabel.Location = new System.Drawing.Point(1105, 218);
-            this.brightLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.brightLabel.Location = new System.Drawing.Point(516, 88);
             this.brightLabel.Name = "brightLabel";
-            this.brightLabel.Size = new System.Drawing.Size(139, 37);
+            this.brightLabel.Size = new System.Drawing.Size(62, 15);
             this.brightLabel.TabIndex = 24;
             this.brightLabel.Text = "Brightness";
             this.brightLabel.Visible = false;
@@ -221,10 +227,9 @@
             // onBrightCheckbox
             // 
             this.onBrightCheckbox.AutoSize = true;
-            this.onBrightCheckbox.Location = new System.Drawing.Point(1105, 146);
-            this.onBrightCheckbox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.onBrightCheckbox.Location = new System.Drawing.Point(516, 59);
             this.onBrightCheckbox.Name = "onBrightCheckbox";
-            this.onBrightCheckbox.Size = new System.Drawing.Size(333, 41);
+            this.onBrightCheckbox.Size = new System.Drawing.Size(154, 19);
             this.onBrightCheckbox.TabIndex = 23;
             this.onBrightCheckbox.Text = "Include On/Bri elements";
             this.onBrightCheckbox.UseVisualStyleBackColor = true;
@@ -235,10 +240,9 @@
             this.hexCheckBox.AutoSize = true;
             this.hexCheckBox.Checked = true;
             this.hexCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hexCheckBox.Location = new System.Drawing.Point(811, 208);
-            this.hexCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.hexCheckBox.Location = new System.Drawing.Point(378, 84);
             this.hexCheckBox.Name = "hexCheckBox";
-            this.hexCheckBox.Size = new System.Drawing.Size(226, 41);
+            this.hexCheckBox.Size = new System.Drawing.Size(105, 19);
             this.hexCheckBox.TabIndex = 22;
             this.hexCheckBox.Text = "Use Hex Codes";
             this.hexCheckBox.UseVisualStyleBackColor = true;
@@ -249,10 +253,9 @@
             this.serpCheckBox.AutoSize = true;
             this.serpCheckBox.Checked = true;
             this.serpCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.serpCheckBox.Location = new System.Drawing.Point(811, 146);
-            this.serpCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.serpCheckBox.Location = new System.Drawing.Point(378, 59);
             this.serpCheckBox.Name = "serpCheckBox";
-            this.serpCheckBox.Size = new System.Drawing.Size(176, 41);
+            this.serpCheckBox.Size = new System.Drawing.Size(82, 19);
             this.serpCheckBox.TabIndex = 21;
             this.serpCheckBox.Text = "Serpentine";
             this.serpCheckBox.UseVisualStyleBackColor = true;
@@ -260,10 +263,9 @@
             // 
             // resetBtn
             // 
-            this.resetBtn.Location = new System.Drawing.Point(10, 1037);
-            this.resetBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.resetBtn.Location = new System.Drawing.Point(5, 420);
             this.resetBtn.Name = "resetBtn";
-            this.resetBtn.Size = new System.Drawing.Size(161, 57);
+            this.resetBtn.Size = new System.Drawing.Size(75, 23);
             this.resetBtn.TabIndex = 20;
             this.resetBtn.Text = "Reset";
             this.resetBtn.UseVisualStyleBackColor = true;
@@ -271,10 +273,9 @@
             // 
             // savePresetBtn
             // 
-            this.savePresetBtn.Location = new System.Drawing.Point(1467, 1037);
-            this.savePresetBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.savePresetBtn.Location = new System.Drawing.Point(685, 420);
             this.savePresetBtn.Name = "savePresetBtn";
-            this.savePresetBtn.Size = new System.Drawing.Size(206, 57);
+            this.savePresetBtn.Size = new System.Drawing.Size(96, 23);
             this.savePresetBtn.TabIndex = 19;
             this.savePresetBtn.Text = "Save as Preset";
             this.savePresetBtn.UseVisualStyleBackColor = true;
@@ -283,10 +284,9 @@
             // 
             // generateBtn
             // 
-            this.generateBtn.Location = new System.Drawing.Point(809, 33);
-            this.generateBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.generateBtn.Location = new System.Drawing.Point(378, 13);
             this.generateBtn.Name = "generateBtn";
-            this.generateBtn.Size = new System.Drawing.Size(161, 57);
+            this.generateBtn.Size = new System.Drawing.Size(75, 23);
             this.generateBtn.TabIndex = 18;
             this.generateBtn.Text = "Generate";
             this.generateBtn.UseVisualStyleBackColor = true;
@@ -294,19 +294,17 @@
             // 
             // imageBox
             // 
-            this.imageBox.Location = new System.Drawing.Point(650, 30);
-            this.imageBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.imageBox.Location = new System.Drawing.Point(303, 12);
             this.imageBox.Name = "imageBox";
-            this.imageBox.Size = new System.Drawing.Size(34, 39);
+            this.imageBox.Size = new System.Drawing.Size(16, 16);
             this.imageBox.TabIndex = 17;
             this.imageBox.TabStop = false;
             // 
             // selectFileBtn
             // 
-            this.selectFileBtn.Location = new System.Drawing.Point(312, 33);
-            this.selectFileBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.selectFileBtn.Location = new System.Drawing.Point(146, 13);
             this.selectFileBtn.Name = "selectFileBtn";
-            this.selectFileBtn.Size = new System.Drawing.Size(197, 57);
+            this.selectFileBtn.Size = new System.Drawing.Size(92, 23);
             this.selectFileBtn.TabIndex = 16;
             this.selectFileBtn.Text = "Select File...";
             this.selectFileBtn.UseVisualStyleBackColor = true;
@@ -315,20 +313,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 33);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(14, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(283, 37);
+            this.label1.Size = new System.Drawing.Size(125, 15);
             this.label1.TabIndex = 15;
             this.label1.Text = "Input Image (16x16px)";
             // 
             // resultTextBox
             // 
-            this.resultTextBox.Location = new System.Drawing.Point(10, 507);
-            this.resultTextBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.resultTextBox.Location = new System.Drawing.Point(5, 206);
             this.resultTextBox.Multiline = true;
             this.resultTextBox.Name = "resultTextBox";
-            this.resultTextBox.Size = new System.Drawing.Size(1658, 485);
+            this.resultTextBox.Size = new System.Drawing.Size(776, 199);
             this.resultTextBox.TabIndex = 14;
             // 
             // pythonTab
@@ -338,20 +334,30 @@
             this.pythonTab.Controls.Add(this.pythonTabBulkBtn);
             this.pythonTab.Controls.Add(this.label2);
             this.pythonTab.Controls.Add(this.pythonOutputText);
-            this.pythonTab.Location = new System.Drawing.Point(10, 55);
+            this.pythonTab.Location = new System.Drawing.Point(4, 24);
+            this.pythonTab.Margin = new System.Windows.Forms.Padding(1);
             this.pythonTab.Name = "pythonTab";
-            this.pythonTab.Padding = new System.Windows.Forms.Padding(3);
-            this.pythonTab.Size = new System.Drawing.Size(1682, 1124);
+            this.pythonTab.Padding = new System.Windows.Forms.Padding(1);
+            this.pythonTab.Size = new System.Drawing.Size(792, 499);
             this.pythonTab.TabIndex = 1;
             this.pythonTab.Text = "Python Gen";
             this.pythonTab.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(246, 17);
+            this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(401, 15);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "This creates python variables based on filename, so name files accordingly.";
+            // 
             // pythonTabResetBtn
             // 
-            this.pythonTabResetBtn.Location = new System.Drawing.Point(1508, 31);
-            this.pythonTabResetBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.pythonTabResetBtn.Location = new System.Drawing.Point(704, 13);
             this.pythonTabResetBtn.Name = "pythonTabResetBtn";
-            this.pythonTabResetBtn.Size = new System.Drawing.Size(161, 57);
+            this.pythonTabResetBtn.Size = new System.Drawing.Size(75, 23);
             this.pythonTabResetBtn.TabIndex = 21;
             this.pythonTabResetBtn.Text = "Reset Tab";
             this.pythonTabResetBtn.UseVisualStyleBackColor = true;
@@ -359,10 +365,9 @@
             // 
             // pythonTabBulkBtn
             // 
-            this.pythonTabBulkBtn.Location = new System.Drawing.Point(321, 31);
-            this.pythonTabBulkBtn.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.pythonTabBulkBtn.Location = new System.Drawing.Point(150, 13);
             this.pythonTabBulkBtn.Name = "pythonTabBulkBtn";
-            this.pythonTabBulkBtn.Size = new System.Drawing.Size(197, 57);
+            this.pythonTabBulkBtn.Size = new System.Drawing.Size(92, 23);
             this.pythonTabBulkBtn.TabIndex = 20;
             this.pythonTabBulkBtn.Text = "Select Files...";
             this.pythonTabBulkBtn.UseVisualStyleBackColor = true;
@@ -371,42 +376,47 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(40, 31);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(19, 13);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(235, 37);
+            this.label2.Size = new System.Drawing.Size(105, 15);
             this.label2.TabIndex = 19;
             this.label2.Text = "Bulk Image Import";
             // 
             // pythonOutputText
             // 
-            this.pythonOutputText.Location = new System.Drawing.Point(15, 117);
+            this.pythonOutputText.Location = new System.Drawing.Point(7, 47);
+            this.pythonOutputText.Margin = new System.Windows.Forms.Padding(1);
             this.pythonOutputText.Multiline = true;
             this.pythonOutputText.Name = "pythonOutputText";
-            this.pythonOutputText.Size = new System.Drawing.Size(1654, 982);
+            this.pythonOutputText.Size = new System.Drawing.Size(774, 400);
             this.pythonOutputText.TabIndex = 0;
             // 
             // pythonOpenFilesDialog
             // 
             this.pythonOpenFilesDialog.Multiselect = true;
             // 
-            // label3
+            // helpToolStripMenuItem
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(527, 41);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(899, 37);
-            this.label3.TabIndex = 22;
-            this.label3.Text = "This creates python variables based on filename, so name files accordingly.";
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 37F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1714, 1236);
+            this.ClientSize = new System.Drawing.Size(800, 553);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.Name = "Form1";
             this.Text = "WLED Pixel Art Generator";
             this.menuStrip1.ResumeLayout(false);
@@ -456,5 +466,7 @@
         private OpenFileDialog pythonOpenFilesDialog;
         private ToolStripMenuItem resetAllToolStripMenuItem;
         private Label label3;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
     }
 }

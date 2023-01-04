@@ -1,3 +1,8 @@
+v0.6.1 [beta]
+- Fixed issue with saved URL not displaying correctly in settings until application re-launch
+- Added help menu/about item with link to github and links to WLED Project.
+- Fixed issue with initial window size.
+
 v0.6.0 [beta]
 - Added (Optional) Python Mode (Enable in Options Menu) - allows you to create python dictionary variables for your pixel art for use in python via requests. This automatically converts 'true' into 'True' as Python requires.
 - Python Mode supports multiple image uploads. 

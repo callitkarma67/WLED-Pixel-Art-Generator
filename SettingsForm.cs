@@ -16,11 +16,21 @@ namespace WLED_Pixel_Art_Generator
         public SettingsForm()
         {
             InitializeComponent();
+            settingsUrlText.Text = "";
+            SetupSettingsForm(AppDataUtil.LoadSaveData());
+        }
+
+        private void SetupSettingsForm(AppSaveData data)
+        {
+            settingsBrightnessLevelText.Text = data.Brightness.ToString();
+            settingsHexCheckbox.Checked = data.UseHex;
+            settingsOnBriCheckbox.Checked = data.UseOnBright;
+            settingsSerpCheckbox.Checked = data.Serpentine;
+            settingsUrlText.Text = data.WledIp;
         }
 
         private void settingsCancelBtn_Click(object sender, EventArgs e)
         {
-            Form1.Instance.SetUrl(settingsUrlText.Text);
             this.Close();
         }
 
@@ -36,6 +46,7 @@ namespace WLED_Pixel_Art_Generator
             };
 
             AppDataUtil.SaveData(saveData);
+            Form1.Instance.SetUrl(settingsUrlText.Text);
         }
 
         private void settingsSaveBtn_Click(object sender, EventArgs e)
@@ -54,11 +65,6 @@ namespace WLED_Pixel_Art_Generator
                 settingsBrightnessLevelText.Text = "";
                 return;
             }
-        }
-
-        public void SetUrlFromSave(string url)
-        {
-            settingsUrlText.Text = url;
         }
     }
 
