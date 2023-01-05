@@ -1,3 +1,6 @@
+v0.6.2 [beta]
+- Added M12 element to JSON. This ensures that pixel art displays properly if the Expand 1d segment setting was set to something other than pixels.
+
 v0.6.1 [beta]
 - Fixed issue with saved URL not displaying correctly in settings until application re-launch
 - Added help menu/about item with link to github and links to WLED Project.
