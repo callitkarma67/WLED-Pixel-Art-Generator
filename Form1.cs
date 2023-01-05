@@ -219,11 +219,11 @@ namespace WLED_Pixel_Art_Generator
             int firstKey = 0;
             int lastKey = 0;
             string hexCode = "";
-            string output = "{\"seg\":{\"id\":0,\"i\":[";
+            string output = "{\"seg\":{\"id\":0,\"m12\":0,\"i\":[";
 
             if (_includeOnBright)
             {
-                output = $"{{\"on\":true,\"bri\":{_brightness},\"seg\":{{\"id\":0,\"i\":[";
+                output = $"{{\"on\":true,\"bri\":{_brightness},\"seg\":{{\"id\":0,\"m12\":0,\"i\":[";
             }
 
 
