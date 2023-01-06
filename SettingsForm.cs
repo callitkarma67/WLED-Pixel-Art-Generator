@@ -77,5 +77,6 @@ namespace WLED_Pixel_Art_Generator
         public bool UseOnBright;
         public int Brightness;
         public bool UsePython;
+        public bool UseHass;
     }
 }

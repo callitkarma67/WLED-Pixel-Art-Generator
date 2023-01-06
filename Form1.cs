@@ -8,7 +8,7 @@ namespace WLED_Pixel_Art_Generator
     public partial class Form1 : Form
     {
         public static Form1 Instance;
-        public string VersionNumber = "v0.6.1-b";
+        public string VersionNumber = "v1.0";
         private bool _presetSaved;
 
         private Bitmap _imageBitmap;
@@ -17,20 +17,33 @@ namespace WLED_Pixel_Art_Generator
         private bool _serpentine;
         private bool _includeOnBright;
         private bool _pythonTab;
+        private bool _hassTab;
+        private bool _bulkHass;
+        private bool _pythonGen;
         private string _brightness;
         private string _wledUrl;
         private string _uploadedImageName;
+        private AppSaveData _data;
         public Form1()
         {
             InitializeComponent();
-            Instance= this;
+            Instance = this;
             generateBtn.Enabled = false;
             LoadData();
             _useHex = hexCheckBox.Checked;
             _serpentine = serpCheckBox.Checked;
             _includeOnBright = onBrightCheckbox.Checked;
             _pythonTab = enablePythonModeToolStripMenuItem.Checked;
+            _hassTab = enableHomeAssistantToolStripMenuItem.Checked;
+            _bulkHass = false;
+            hassBulkCheckbox.Checked = false;
+            _pythonGen = false;
+            mainTabCopyBtn.Visible = false;
+            pythonTabCopyBtn.Visible = false;
+            hassTabCopyBtn.Visible = false;
+
             ShowPythonTab(_pythonTab);
+            ShowPythonListTab(false);
         }
 
         private void LoadData()
@@ -42,40 +55,9 @@ namespace WLED_Pixel_Art_Generator
             serpCheckBox.Checked = data.Serpentine;
             brightText.Text = data.Brightness.ToString();
             enablePythonModeToolStripMenuItem.Checked = data.UsePython;
-        }
+            enableHomeAssistantToolStripMenuItem.Checked = data.UseHass;
 
-        private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void selectFileBtn_Click(object sender, EventArgs e)
-        {
-            string picsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            openFileDialog1 = new OpenFileDialog()
-            {
-                InitialDirectory = picsDir,
-                Title = "Select Image File",
-                RestoreDirectory= true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                DefaultExt = "png",
-                Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG,*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF|" + "All files (*.*)|*.*",
-                ReadOnlyChecked = true,
-                ShowReadOnly = true
-            };
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    HandleImageSelection();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
+            _data = data;
         }
 
         private void HandleImageSelection()
@@ -89,7 +71,7 @@ namespace WLED_Pixel_Art_Generator
             _uploadedImageName = openFileDialog1.SafeFileName;
             _imageBitmap = bitmap;
 
-            if (!validImage(_imageBitmap))
+            if (!ValidImage(_imageBitmap))
             {
                 MessageBox.Show("Sorry, only images that are 16 x 16px are supported at this time.");
                 return;
@@ -105,17 +87,25 @@ namespace WLED_Pixel_Art_Generator
         private void AddBulkImages(string fileName)
         {
             _uploadedImageName = Path.GetFileName(fileName);
-            Bitmap bitmap= new Bitmap(fileName);
+            Bitmap bitmap = new Bitmap(fileName);
             _imageBitmap = bitmap;
 
-            if (!validImage(_imageBitmap))
+            if (!ValidImage(_imageBitmap))
             {
                 MessageBox.Show("Sorry, only images that are 16 x 16px are supported at this time.");
                 return;
             }
             Generate();
-            SendToPythonGenerator();
+            if (_bulkHass)
+            {
+                SendToHassTab();
+            } else
+            {
+                SendToPythonGenerator();
+                pythonProgressBar.PerformStep();
+            }
             ResetForBulk();
+
         }
 
         public bool ThumbnailCallback()
@@ -123,28 +113,9 @@ namespace WLED_Pixel_Art_Generator
             return false;
         }
 
-        private bool validImage(Bitmap bitmap)
+        private bool ValidImage(Bitmap bitmap)
         {
             return _imageBitmap.Width == 16 && _imageBitmap.Height == 16;
-        }
-
-        private void generateBtn_Click(object sender, EventArgs e)
-        {
-            Image image = imageBox.Image;
-
-            Generate();
-            
-            // DEBUG Only.
-            //foreach (var pixel in _gridPixelList.OrderBy(p => p.id))
-            //{
-            //    System.Diagnostics.Debug.WriteLine(pixel.id + " : " + pixel.hexCode);
-            //}
-
-            
-            generateBtn.Enabled = false;
-            postBtn.Visible = true;
-            savePresetBtn.Visible= true;
-            wledOffBtn.Visible = true;
         }
 
         private void Generate()
@@ -189,6 +160,7 @@ namespace WLED_Pixel_Art_Generator
             }
 
             ConsolidateAndOutput();
+            _imageBitmap.Dispose();
         }
 
         private string ConvertToHex(Color color)
@@ -304,18 +276,105 @@ namespace WLED_Pixel_Art_Generator
 
             output += "]}}";
             resultTextBox.Text = output;
+
+            if (_hassTab && !_pythonGen)
+                SendToHassTab();
         }
 
         private void SendToPythonGenerator()
         {
+            ShowPythonListTab(true);
             string variableName = Regex.Replace(_uploadedImageName, "\\.\\w{3,}$", "");
             pythonOutputText.Text += $"{variableName} = {resultTextBox.Text.Replace("\"on\":true", "\"on\":True")}{Environment.NewLine}";
+            pythonArtDict.Text = PythonUtil.GetPythonDictionary(pythonOutputText.Text);
+            pythonArtList.Text = PythonUtil.GetPythonArtList(pythonArtDict.Text);
+            pythonTabBulkBtn.Text = "Select Files...";
+            
         }
 
-        private void resetBtn_Click(object sender, EventArgs e)
+        private void SendToHassTab()
         {
-            ResetMainForm();
+            if (!_hassTab)
+            { return; }
+
+            if (_bulkHass)
+            {
+                hassOutputText.Text += HassUtil.GetHassSwitch(resultTextBox.Text, Regex.Replace(_uploadedImageName, "\\.\\w{3,}$", ""), true);
+            } else
+            {
+                hassOutputText.Text += HassUtil.GetHassSwitch(resultTextBox.Text, Regex.Replace(_uploadedImageName, "\\.\\w{3,}$", ""), false);
+            }
+            yamlStartCheckbox.Enabled = true;
+            pythonProgressBar.PerformStep();
+            pythonTabBulkBtn.Text = "Select Files...";
         }
+
+        public void SetPresetSaved(bool saved)
+        {
+            _presetSaved = saved;
+
+            savePresetBtn.Enabled = !_presetSaved;
+        }
+
+        public void SetUrl(string url)
+        {
+            _wledUrl = url;
+        }
+
+        private void ShowPythonTab(bool visible)
+        {
+            if (visible)
+            {
+                if (!tabControl1.TabPages.ContainsKey("pythonTab"))
+                    tabControl1.TabPages.Add(pythonTab);
+            }
+            else
+            {
+                tabControl1.TabPages.Remove(pythonTab);
+            }
+            pythonTab.Visible = visible;
+        }
+
+        private void ShowPythonListTab(bool visible)
+        {
+            if (visible)
+            {
+                if (!tabControl1.TabPages.ContainsKey("pythonListTab"))
+                {
+                    tabControl1.TabPages.Add(pythonListTab);
+                    if (_hassTab)
+                    {
+                        tabControl1.TabPages.Remove(hassTab);
+                        tabControl1.TabPages.Add(hassTab);
+                    }
+                }
+            }
+            else
+            {
+                tabControl1.TabPages.Remove(pythonListTab);
+            }
+            pythonListTab.Visible = visible;
+        }
+
+        private void ShowHassTab(bool visible)
+        {
+            if (visible)
+            {
+                hassBulkCheckbox.Visible = true;
+                if (!tabControl1.TabPages.ContainsKey("hassTab"))
+                    tabControl1.TabPages.Add(hassTab);
+            }
+            else
+            {
+                hassBulkCheckbox.Visible = false;
+                tabControl1.TabPages.Remove(hassTab);
+            }
+            hassTab.Visible = visible;
+        }
+
+        public string Url => _wledUrl;
+
+        #region Reset Region
 
         private void ResetForBulk()
         {
@@ -328,7 +387,6 @@ namespace WLED_Pixel_Art_Generator
         {
             resultTextBox.Clear();
             generateBtn.Enabled = false;
-            _imageBitmap = null;
             _gridPixelList = new List<GridPixel>();
             imageBox.Image = null;
             selectFileBtn.Enabled = true;
@@ -343,14 +401,110 @@ namespace WLED_Pixel_Art_Generator
             postBtn.Visible = false;
             wledOffBtn.Visible = false;
             savePresetBtn.Visible = false;
+            yamlStartCheckbox.Enabled = false;
+            hassOutputText.Clear();
+            _pythonGen = false;
+            _bulkHass = false;
+            hassBulkCheckbox.Checked = false;
+            mainTabCopyBtn.Visible = false;
+            hassTabCopyBtn.Visible = false;
+            HassUtil.Reset();
             SetPresetSaved(false);
             LoadData();
         }
 
         private void ResetPythonTab()
         {
-            pythonOutputText.Text = "";
+            pythonOutputText.Clear();
+            pythonArtDict.Clear();
+            pythonArtList.Clear();
             pythonTabBulkBtn.Enabled = true;
+            _pythonGen = false;
+            _bulkHass = false;
+            hassBulkCheckbox.Checked = false;
+            pythonTabCopyBtn.Visible = false;
+            HassUtil.Reset();
+            ShowPythonListTab(false);
+        }
+
+        #endregion
+
+        private void generateBtn_Click(object sender, EventArgs e)
+        {
+            if (_bulkHass && _pythonGen)
+            {
+                hassOutputText.Clear();
+                _bulkHass = false;
+                hassBulkCheckbox.Checked = false;
+                _pythonGen = false;
+            }
+            Image image = imageBox.Image;
+
+            Generate();
+
+            // DEBUG Only.
+            // foreach (var pixel in _gridPixelList.OrderBy(p => p.id))
+            // {
+            //    System.Diagnostics.Debug.WriteLine(pixel.id + " : " + pixel.hexCode);
+            // }
+
+
+            generateBtn.Enabled = false;
+            postBtn.Visible = true;
+            savePresetBtn.Visible = true;
+            wledOffBtn.Visible = true;
+            if (_hassTab)
+            {
+                ShowHassTab(_hassTab);
+            }
+            mainTabCopyBtn.Visible = true;
+            hassTabCopyBtn.Visible = true;
+        }
+
+        #region Form Element Interactions
+
+        private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void selectFileBtn_Click(object sender, EventArgs e)
+        {
+            string picsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            openFileDialog1 = new OpenFileDialog()
+            {
+                InitialDirectory = picsDir,
+                Title = "Select Image File",
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "png",
+                Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG,*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF|" + "All files (*.*)|*.*",
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    HandleImageSelection();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            var msg = MessageBox.Show("Are you sure you want to reset this tab? This cannot be undone.", "Reset Tab", MessageBoxButtons.YesNo);
+
+            if (msg == DialogResult.Yes)
+            {
+                ResetMainForm();
+            }
         }
 
         private void hexCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -378,7 +532,7 @@ namespace WLED_Pixel_Art_Generator
                 brightText.Visible = true;
             } else
             {
-                _includeOnBright= false;
+                _includeOnBright = false;
                 brightLabel.Visible = false;
                 brightText.Visible = false;
             }
@@ -419,50 +573,44 @@ namespace WLED_Pixel_Art_Generator
             savePresetForm.Show();
         }
 
-        public void SetPresetSaved(bool saved)
-        {
-            _presetSaved = saved;
-
-            savePresetBtn.Enabled = !_presetSaved;
-        }
-
-        public void SetUrl(string url)
-        {
-            _wledUrl= url;
-        }
-
-        private void ShowPythonTab(bool visible)
-        {
-            if (visible)
-            {
-                if (!tabControl1.TabPages.ContainsKey("pythonTab"))
-                    tabControl1.TabPages.Add(pythonTab);
-            } else
-            {
-                tabControl1.TabPages.Remove(pythonTab);
-            }
-            pythonTab.Visible = visible;
-        }
-
-        public string Url => _wledUrl;
-
         private void enablePythonModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _pythonTab = enablePythonModeToolStripMenuItem.Checked;
-            AppSaveData data = AppDataUtil.LoadSaveData();
-            data.UsePython = _pythonTab;
-            AppDataUtil.SaveData(data);
+            _data.UsePython = _pythonTab;
+            AppDataUtil.SaveData(_data);
             ShowPythonTab(_pythonTab);
+        }
+
+        private void enableHomeAssistantToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _hassTab = enableHomeAssistantToolStripMenuItem.Checked;
+            _data.UseHass = _hassTab;
+            AppDataUtil.SaveData(_data);
+
         }
 
         private void pythonTabBulkBtn_Click(object sender, EventArgs e)
         {
+            if (resultTextBox.Text.Length > 0)
+            {
+                var bulkHassCbState = hassBulkCheckbox.Checked;
+                var msg = MessageBox.Show("There is data on the main tab. If you continue, all data will be lost. Do you want to continue? This cannot be undone.", "Overwrite", MessageBoxButtons.YesNo);
+
+                if (msg == DialogResult.No)
+                {
+                    return;
+                }
+                ResetMainForm();
+                _bulkHass = bulkHassCbState;
+                hassBulkCheckbox.Checked = bulkHassCbState;
+            }
+
             string picsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             pythonOpenFilesDialog = new OpenFileDialog()
             {
                 InitialDirectory = picsDir,
                 Title = "Select Image File",
-                Multiselect= true,
+                Multiselect = true,
 
                 CheckFileExists = true,
                 CheckPathExists = true,
@@ -472,28 +620,52 @@ namespace WLED_Pixel_Art_Generator
                 ShowReadOnly = true
             };
 
-            
 
             if (pythonOpenFilesDialog.ShowDialog() == DialogResult.OK)
             {
+                pythonTabCopyBtn.Visible = true;
+                _pythonGen = true;
+                pythonProgressBar.Visible = true;
+                pythonProgressBar.Minimum = 1;
+                pythonProgressBar.Maximum = pythonOpenFilesDialog.FileNames.Length;
+                pythonProgressBar.Value = 1;
+                pythonProgressBar.Step = 1;
+                pythonTabBulkBtn.Text = "Loading...";
                 pythonTabBulkBtn.Enabled = false;
                 try
                 {
                     for (int i = 0; i < pythonOpenFilesDialog.FileNames.Length; i++)
                     {
                         AddBulkImages(pythonOpenFilesDialog.FileNames[i]);
+                        
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
+                } 
+                finally
+                {
+                    pythonProgressBar.Visible = false;
+                    if (_bulkHass)
+                    {
+                        hassTabCopyBtn.Visible = true;
+                        ShowHassTab(_hassTab);
+                        tabControl1.SelectTab(hassTab);
+                    }
+                    resultTextBox.Clear();
                 }
             }
         }
 
         private void pythonTabResetBtn_Click(object sender, EventArgs e)
         {
-            ResetPythonTab();
+            var msg = MessageBox.Show("Are you sure you want to reset this tab? This cannot be undone.", "Reset Tab", MessageBoxButtons.YesNo);
+
+            if (msg == DialogResult.Yes)
+            {
+                ResetPythonTab();
+            }
         }
 
         private void resetAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -504,14 +676,62 @@ namespace WLED_Pixel_Art_Generator
             {
                 ResetPythonTab();
                 ResetMainForm();
+                tabControl1.SelectTab(tabPage1);
             }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            HelpForm helpForm= new HelpForm();
+            HelpForm helpForm = new HelpForm();
             helpForm.Show();
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var msg = MessageBox.Show("Are you sure you want to exit? Any unsaved settings/presets and values will be lost.", "Confirm Exit", MessageBoxButtons.YesNo);
+
+            if (msg == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void yamlStartCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            hassOutputText.Text = HassUtil.ToggleYamlStarter(yamlStartCheckbox.Checked);
+        }
+
+        private void hassBulkCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            _bulkHass = hassBulkCheckbox.Checked;
+        }
+
+        private void mainTabCopyBtn_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(resultTextBox.Text);
+        }
+
+        private void pythonTabCopyBtn_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(pythonOutputText.Text);
+        }
+
+        private void pythonListCopyDictBtn_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(pythonArtDict.Text);
+        }
+
+        private void pythonListCopyListBtn_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(pythonArtList.Text);
+        }
+
+        private void hassTabCopyBtn_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(hassOutputText.Text);
+        }
+
+        #endregion
     }
 }
 

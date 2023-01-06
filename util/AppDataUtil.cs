@@ -47,7 +47,8 @@ namespace WLED_Pixel_Art_Generator.util
                 File.WriteAllText(dataFolder + fileName, String.Empty);
             }
             
-            using (StreamWriter sw = new StreamWriter(dataFolder + fileName)) {
+            using (StreamWriter sw = new StreamWriter(dataFolder + fileName)) 
+            {
 
                 sw.Write(presetJson);
                 sw.Close();
@@ -76,11 +77,12 @@ namespace WLED_Pixel_Art_Generator.util
 
         private static AppSaveData Deserialize()
         {
-            if (!File.Exists(dataFolder + "data.sav")) {
+            if (!File.Exists(dataFolder + "data.sav")) 
+            {
                 return new AppSaveData()
                 {
                     WledIp = "",
-                    UseHex= true,
+                    UseHex = true,
                     Serpentine = true,
                     UseOnBright = true,
                     Brightness = 25

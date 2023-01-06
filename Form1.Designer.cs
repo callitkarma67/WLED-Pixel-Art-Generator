@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,8 +38,11 @@
             this.enablePythonModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableHomeAssistantToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.mainTabCopyBtn = new System.Windows.Forms.Button();
             this.wledOffBtn = new System.Windows.Forms.Button();
             this.postBtn = new System.Windows.Forms.Button();
             this.brightText = new System.Windows.Forms.TextBox();
@@ -54,19 +58,34 @@
             this.label1 = new System.Windows.Forms.Label();
             this.resultTextBox = new System.Windows.Forms.TextBox();
             this.pythonTab = new System.Windows.Forms.TabPage();
+            this.pythonTabCopyBtn = new System.Windows.Forms.Button();
+            this.hassBulkCheckbox = new System.Windows.Forms.CheckBox();
+            this.pythonProgressBar = new System.Windows.Forms.ProgressBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pythonTabResetBtn = new System.Windows.Forms.Button();
             this.pythonTabBulkBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.pythonOutputText = new System.Windows.Forms.TextBox();
+            this.pythonListTab = new System.Windows.Forms.TabPage();
+            this.pythonListCopyListBtn = new System.Windows.Forms.Button();
+            this.pythonListCopyDictBtn = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.pythonArtList = new System.Windows.Forms.TextBox();
+            this.pythonArtDict = new System.Windows.Forms.TextBox();
+            this.hassTab = new System.Windows.Forms.TabPage();
+            this.hassTabCopyBtn = new System.Windows.Forms.Button();
+            this.yamlStartCheckbox = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.hassOutputText = new System.Windows.Forms.TextBox();
             this.pythonOpenFilesDialog = new System.Windows.Forms.OpenFileDialog();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             this.pythonTab.SuspendLayout();
+            this.pythonListTab.SuspendLayout();
+            this.hassTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -109,6 +128,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -131,11 +151,10 @@
             // enableHomeAssistantToolStripMenuItem
             // 
             this.enableHomeAssistantToolStripMenuItem.CheckOnClick = true;
-            this.enableHomeAssistantToolStripMenuItem.Enabled = false;
             this.enableHomeAssistantToolStripMenuItem.Name = "enableHomeAssistantToolStripMenuItem";
             this.enableHomeAssistantToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.enableHomeAssistantToolStripMenuItem.Text = "Enable Home Assistant";
-            this.enableHomeAssistantToolStripMenuItem.Visible = false;
+            this.enableHomeAssistantToolStripMenuItem.Click += new System.EventHandler(this.enableHomeAssistantToolStripMenuItem_Click);
             // 
             // resetAllToolStripMenuItem
             // 
@@ -144,10 +163,27 @@
             this.resetAllToolStripMenuItem.Text = "Reset All";
             this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.resetAllToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.pythonTab);
+            this.tabControl1.Controls.Add(this.pythonListTab);
+            this.tabControl1.Controls.Add(this.hassTab);
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(1);
             this.tabControl1.Name = "tabControl1";
@@ -157,6 +193,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.mainTabCopyBtn);
             this.tabPage1.Controls.Add(this.wledOffBtn);
             this.tabPage1.Controls.Add(this.postBtn);
             this.tabPage1.Controls.Add(this.brightText);
@@ -179,6 +216,17 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // mainTabCopyBtn
+            // 
+            this.mainTabCopyBtn.Location = new System.Drawing.Point(706, 177);
+            this.mainTabCopyBtn.Name = "mainTabCopyBtn";
+            this.mainTabCopyBtn.Size = new System.Drawing.Size(75, 23);
+            this.mainTabCopyBtn.TabIndex = 28;
+            this.mainTabCopyBtn.Text = "Copy";
+            this.mainTabCopyBtn.UseVisualStyleBackColor = true;
+            this.mainTabCopyBtn.Visible = false;
+            this.mainTabCopyBtn.Click += new System.EventHandler(this.mainTabCopyBtn_Click);
             // 
             // wledOffBtn
             // 
@@ -324,11 +372,15 @@
             this.resultTextBox.Location = new System.Drawing.Point(5, 206);
             this.resultTextBox.Multiline = true;
             this.resultTextBox.Name = "resultTextBox";
+            this.resultTextBox.ReadOnly = true;
             this.resultTextBox.Size = new System.Drawing.Size(776, 199);
             this.resultTextBox.TabIndex = 14;
             // 
             // pythonTab
             // 
+            this.pythonTab.Controls.Add(this.pythonTabCopyBtn);
+            this.pythonTab.Controls.Add(this.hassBulkCheckbox);
+            this.pythonTab.Controls.Add(this.pythonProgressBar);
             this.pythonTab.Controls.Add(this.label3);
             this.pythonTab.Controls.Add(this.pythonTabResetBtn);
             this.pythonTab.Controls.Add(this.pythonTabBulkBtn);
@@ -340,8 +392,39 @@
             this.pythonTab.Padding = new System.Windows.Forms.Padding(1);
             this.pythonTab.Size = new System.Drawing.Size(792, 499);
             this.pythonTab.TabIndex = 1;
-            this.pythonTab.Text = "Python Gen";
+            this.pythonTab.Text = "Python/Bulk Gen";
             this.pythonTab.UseVisualStyleBackColor = true;
+            // 
+            // pythonTabCopyBtn
+            // 
+            this.pythonTabCopyBtn.Location = new System.Drawing.Point(704, 61);
+            this.pythonTabCopyBtn.Name = "pythonTabCopyBtn";
+            this.pythonTabCopyBtn.Size = new System.Drawing.Size(75, 23);
+            this.pythonTabCopyBtn.TabIndex = 31;
+            this.pythonTabCopyBtn.Text = "Copy";
+            this.pythonTabCopyBtn.UseVisualStyleBackColor = true;
+            this.pythonTabCopyBtn.Visible = false;
+            this.pythonTabCopyBtn.Click += new System.EventHandler(this.pythonTabCopyBtn_Click);
+            // 
+            // hassBulkCheckbox
+            // 
+            this.hassBulkCheckbox.AutoSize = true;
+            this.hassBulkCheckbox.Location = new System.Drawing.Point(19, 41);
+            this.hassBulkCheckbox.Name = "hassBulkCheckbox";
+            this.hassBulkCheckbox.Size = new System.Drawing.Size(226, 19);
+            this.hassBulkCheckbox.TabIndex = 30;
+            this.hassBulkCheckbox.Text = "Generate for Home Assistant Switches";
+            this.hassBulkCheckbox.UseVisualStyleBackColor = true;
+            this.hassBulkCheckbox.CheckedChanged += new System.EventHandler(this.hassBulkCheckbox_CheckedChanged);
+            // 
+            // pythonProgressBar
+            // 
+            this.pythonProgressBar.Location = new System.Drawing.Point(7, 469);
+            this.pythonProgressBar.Name = "pythonProgressBar";
+            this.pythonProgressBar.Size = new System.Drawing.Size(774, 23);
+            this.pythonProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pythonProgressBar.TabIndex = 29;
+            this.pythonProgressBar.Visible = false;
             // 
             // label3
             // 
@@ -384,31 +467,147 @@
             // 
             // pythonOutputText
             // 
-            this.pythonOutputText.Location = new System.Drawing.Point(7, 47);
+            this.pythonOutputText.Location = new System.Drawing.Point(7, 88);
             this.pythonOutputText.Margin = new System.Windows.Forms.Padding(1);
             this.pythonOutputText.Multiline = true;
             this.pythonOutputText.Name = "pythonOutputText";
-            this.pythonOutputText.Size = new System.Drawing.Size(774, 400);
+            this.pythonOutputText.ReadOnly = true;
+            this.pythonOutputText.Size = new System.Drawing.Size(774, 377);
             this.pythonOutputText.TabIndex = 0;
+            // 
+            // pythonListTab
+            // 
+            this.pythonListTab.Controls.Add(this.pythonListCopyListBtn);
+            this.pythonListTab.Controls.Add(this.pythonListCopyDictBtn);
+            this.pythonListTab.Controls.Add(this.label5);
+            this.pythonListTab.Controls.Add(this.label4);
+            this.pythonListTab.Controls.Add(this.pythonArtList);
+            this.pythonListTab.Controls.Add(this.pythonArtDict);
+            this.pythonListTab.Location = new System.Drawing.Point(4, 24);
+            this.pythonListTab.Name = "pythonListTab";
+            this.pythonListTab.Size = new System.Drawing.Size(792, 499);
+            this.pythonListTab.TabIndex = 2;
+            this.pythonListTab.Text = "Python List";
+            this.pythonListTab.UseVisualStyleBackColor = true;
+            // 
+            // pythonListCopyListBtn
+            // 
+            this.pythonListCopyListBtn.Location = new System.Drawing.Point(697, 10);
+            this.pythonListCopyListBtn.Name = "pythonListCopyListBtn";
+            this.pythonListCopyListBtn.Size = new System.Drawing.Size(75, 23);
+            this.pythonListCopyListBtn.TabIndex = 6;
+            this.pythonListCopyListBtn.Text = "Copy";
+            this.pythonListCopyListBtn.UseVisualStyleBackColor = true;
+            this.pythonListCopyListBtn.Click += new System.EventHandler(this.pythonListCopyListBtn_Click);
+            // 
+            // pythonListCopyDictBtn
+            // 
+            this.pythonListCopyDictBtn.Location = new System.Drawing.Point(234, 10);
+            this.pythonListCopyDictBtn.Name = "pythonListCopyDictBtn";
+            this.pythonListCopyDictBtn.Size = new System.Drawing.Size(75, 23);
+            this.pythonListCopyDictBtn.TabIndex = 5;
+            this.pythonListCopyDictBtn.Text = "Copy";
+            this.pythonListCopyDictBtn.UseVisualStyleBackColor = true;
+            this.pythonListCopyDictBtn.Click += new System.EventHandler(this.pythonListCopyDictBtn_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(469, 10);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 15);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Art List";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 15);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Dictionary Mapping";
+            // 
+            // pythonArtList
+            // 
+            this.pythonArtList.Location = new System.Drawing.Point(469, 41);
+            this.pythonArtList.Margin = new System.Windows.Forms.Padding(1);
+            this.pythonArtList.Multiline = true;
+            this.pythonArtList.Name = "pythonArtList";
+            this.pythonArtList.ReadOnly = true;
+            this.pythonArtList.Size = new System.Drawing.Size(303, 453);
+            this.pythonArtList.TabIndex = 2;
+            // 
+            // pythonArtDict
+            // 
+            this.pythonArtDict.Location = new System.Drawing.Point(6, 41);
+            this.pythonArtDict.Margin = new System.Windows.Forms.Padding(1);
+            this.pythonArtDict.Multiline = true;
+            this.pythonArtDict.Name = "pythonArtDict";
+            this.pythonArtDict.ReadOnly = true;
+            this.pythonArtDict.Size = new System.Drawing.Size(303, 453);
+            this.pythonArtDict.TabIndex = 1;
+            // 
+            // hassTab
+            // 
+            this.hassTab.Controls.Add(this.hassTabCopyBtn);
+            this.hassTab.Controls.Add(this.yamlStartCheckbox);
+            this.hassTab.Controls.Add(this.label6);
+            this.hassTab.Controls.Add(this.hassOutputText);
+            this.hassTab.Location = new System.Drawing.Point(4, 24);
+            this.hassTab.Name = "hassTab";
+            this.hassTab.Size = new System.Drawing.Size(792, 499);
+            this.hassTab.TabIndex = 3;
+            this.hassTab.Text = "Home Assistant";
+            this.hassTab.UseVisualStyleBackColor = true;
+            // 
+            // hassTabCopyBtn
+            // 
+            this.hassTabCopyBtn.Location = new System.Drawing.Point(708, 19);
+            this.hassTabCopyBtn.Name = "hassTabCopyBtn";
+            this.hassTabCopyBtn.Size = new System.Drawing.Size(75, 23);
+            this.hassTabCopyBtn.TabIndex = 6;
+            this.hassTabCopyBtn.Text = "Copy";
+            this.hassTabCopyBtn.UseVisualStyleBackColor = true;
+            this.hassTabCopyBtn.Visible = false;
+            this.hassTabCopyBtn.Click += new System.EventHandler(this.hassTabCopyBtn_Click);
+            // 
+            // yamlStartCheckbox
+            // 
+            this.yamlStartCheckbox.AutoSize = true;
+            this.yamlStartCheckbox.Checked = true;
+            this.yamlStartCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.yamlStartCheckbox.Enabled = false;
+            this.yamlStartCheckbox.Location = new System.Drawing.Point(9, 15);
+            this.yamlStartCheckbox.Name = "yamlStartCheckbox";
+            this.yamlStartCheckbox.Size = new System.Drawing.Size(157, 19);
+            this.yamlStartCheckbox.TabIndex = 3;
+            this.yamlStartCheckbox.Text = "Add/Remove YAML Start";
+            this.yamlStartCheckbox.UseVisualStyleBackColor = true;
+            this.yamlStartCheckbox.CheckedChanged += new System.EventHandler(this.yamlStartCheckbox_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(235, 19);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(291, 15);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Output is generated by Main or Python/Bulk Gen Tabs";
+            // 
+            // hassOutputText
+            // 
+            this.hassOutputText.Location = new System.Drawing.Point(9, 49);
+            this.hassOutputText.Margin = new System.Windows.Forms.Padding(1);
+            this.hassOutputText.Multiline = true;
+            this.hassOutputText.Name = "hassOutputText";
+            this.hassOutputText.ReadOnly = true;
+            this.hassOutputText.Size = new System.Drawing.Size(774, 400);
+            this.hassOutputText.TabIndex = 1;
             // 
             // pythonOpenFilesDialog
             // 
             this.pythonOpenFilesDialog.Multiselect = true;
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -417,6 +616,7 @@
             this.ClientSize = new System.Drawing.Size(800, 553);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "WLED Pixel Art Generator";
             this.menuStrip1.ResumeLayout(false);
@@ -427,6 +627,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             this.pythonTab.ResumeLayout(false);
             this.pythonTab.PerformLayout();
+            this.pythonListTab.ResumeLayout(false);
+            this.pythonListTab.PerformLayout();
+            this.hassTab.ResumeLayout(false);
+            this.hassTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -468,5 +672,21 @@
         private Label label3;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
+        private TabPage pythonListTab;
+        private Label label5;
+        private Label label4;
+        private TextBox pythonArtList;
+        private TextBox pythonArtDict;
+        private ProgressBar pythonProgressBar;
+        private TabPage hassTab;
+        private Label label6;
+        private TextBox hassOutputText;
+        private CheckBox yamlStartCheckbox;
+        private CheckBox hassBulkCheckbox;
+        private Button mainTabCopyBtn;
+        private Button pythonTabCopyBtn;
+        private Button pythonListCopyListBtn;
+        private Button pythonListCopyDictBtn;
+        private Button hassTabCopyBtn;
     }
 }

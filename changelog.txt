@@ -1,3 +1,13 @@
+v1.0 [release]
+- Fixed images (resources) not being released and therefore being in use causing the images to be inaccessible in other applications.
+- Added Python dictionary mapping and list generation based on input files for python iterating, other uses. This is a new tab after generating Python data.
+- UX Improvements to Python Generation, included progress bar and loading indicators while processing bulk images.
+- File>Exit now closes the application.
+- Home Assistant Mode - generates YAML to be used in Home Assistant via Command Line Switches.
+- Copy buttons added to each output box.
+- UX Improvements including validations/warnings about overwriting/erasing existing generated data.
+- Title Bar and Task Bar icons added.
+
 v0.6.2 [beta]
 - Added M12 element to JSON. This ensures that pixel art displays properly if the Expand 1d segment setting was set to something other than pixels.
 
