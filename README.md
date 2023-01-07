@@ -52,7 +52,7 @@ off = requests.post("http://[WLED-IP]/json/state", json={"on": False})
 ```
 
 7) Home Assistant Mode [Settings/Enable Home Assistant] will enable Home Assistant Switch generation to be used in your Home Assistant `configuration.yaml`. From the main tab, it will auto generate the YAML required on the Home Assistant tab, note that the tab will not appear until the 'Generate' button is clicked. Alternatively, you can bulk generate Home Assistant switch yaml from the 'Python/Gen' tab. Check the box 'Generate for Home Assistant Switches' under the select file button for Home Assistant bulk yaml to be generated. Note that while this is checked, Python generation will _not_ occur.  
-** Also important to note, the identifiers and Friendly Name elements will be populated using the filename of each image uploaded to this tool. The tool will automatically lower case the filename before inserting into the identifier to comply with home assistant rules, but will not remove spaces. Make sure your filenames do not have spaces. Basic example usage below, see Home Assistant docs for more details.
+** Also important to note, the identifiers and Friendly Name elements will be populated using the filename of each image uploaded to this tool. The tool will automatically lower case the filename before inserting into the identifier to comply with home assistant rules, but will not remove spaces. Make sure your filenames do not have spaces. Basic example usage below, see [Home Assistant docs](https://www.home-assistant.io/docs/) for more details.
 ```yaml
 # configuration.yaml
 ...
