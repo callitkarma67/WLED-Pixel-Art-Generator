@@ -1,3 +1,6 @@
+v1.0.1 [release]
+- Restricted Brightness level between 0-255.
+
 v1.0 [release]
 - Fixed images (resources) not being released and therefore being in use causing the images to be inaccessible in other applications.
 - Added Python dictionary mapping and list generation based on input files for python iterating, other uses. This is a new tab after generating Python data.

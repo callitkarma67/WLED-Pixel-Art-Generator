@@ -22,7 +22,7 @@ namespace WLED_Pixel_Art_Generator
 
         private void SetupSettingsForm(AppSaveData data)
         {
-            settingsBrightnessLevelText.Text = data.Brightness.ToString();
+            settingsBrightnessLevelText.Text = Math.Clamp(data.Brightness, 0, 255).ToString();
             settingsHexCheckbox.Checked = data.UseHex;
             settingsOnBriCheckbox.Checked = data.UseOnBright;
             settingsSerpCheckbox.Checked = data.Serpentine;
@@ -45,6 +45,10 @@ namespace WLED_Pixel_Art_Generator
                 Brightness = int.Parse(settingsBrightnessLevelText.Text)
             };
 
+            if (saveData.Brightness > 255) { saveData.Brightness = 255; }
+
+            if (saveData.Brightness < 0) { saveData.Brightness = 0; }
+
             AppDataUtil.SaveData(saveData);
             Form1.Instance.SetUrl(settingsUrlText.Text);
         }
@@ -64,6 +68,16 @@ namespace WLED_Pixel_Art_Generator
             {
                 settingsBrightnessLevelText.Text = "";
                 return;
+            }
+
+            if (int.Parse(settingsBrightnessLevelText.Text) > 255)
+            {
+                settingsBrightnessLevelText.Text = "255";
+            }
+
+            if (int.Parse(settingsBrightnessLevelText.Text) < 0)
+            {
+                settingsBrightnessLevelText.Text = "0";
             }
         }
     }

@@ -4,12 +4,14 @@ This is an extremely basic and early version of a pixel art generator targeted f
   
 The code is surely a bit messy and can probably be optimized in over a thousand different ways, read on to learn about contributing/helping out if you so choose. I work on this in my limited spare time so know that PRs, features, issues, etc may take a while. Tesing has been extremely limited and there are probably several cases where this does not meet your expectations. Please open issues if there is anything dire needing to be fixed or added.
 
-**Important** This has only been tested with a single 16x16 matrix with the LED Panel Layout of 1st LED = Top Right, Orientation=Horizontal, and Serpentine=ENABLED. This also relies on your WLED being off before using the resulting JSON as it does not include an off command. This includes presets as well, make sure the LEDs are off before using a preset.
+**Important** This has only been tested with a single 16x16 matrix with the LED Panel Layout of 1st LED = Top Right, Orientation=Horizontal, and Serpentine=ENABLED. This also relies on your WLED being off before using the resulting JSON as it does not include an off command. This includes presets as well, make sure the LEDs are off before using a preset.  
+
+Use at your own risk, the author and contributers of this application are not responsible for any damage caused as a result of the use of this software. Make sure you have the proper safety precautions and power requirements for your LEDs. This application does not take into account the power or brightness limitations of your setup and just restricts it to the WLED restriction range of 0-255 for brightness. The default brightness level is set to 25 which may or may not be suitable for your setup, please test your setup before using this application. This software comes with no warranty whatsoever.
 
 ## Settings Available
 1) Serpentine Mode - should be enabled to get the results for the LED matrix settings noted above.
 2) Use Hex - This is currently *NOT* implemented, so it doesn't matter what the setting is, but when it is implemented, you will have the choice of using Hex (more efficient) or a sub-array of RGB values.
-3) Include On/Bri elements - Check this to include the on:true and bri segments of the JSON array. If you select this, you will be able to set your brightness level before generating the JSON. (Default 25)
+3) Include On/Bri elements - Check this to include the on:true and bri segments of the JSON array. If you select this, you will be able to set your brightness level before generating the JSON. (Default 25; Range 0-255)
 
 ## How to use
 For best results, name your files without spaces and in camelcase. e.g. `myFile.png`

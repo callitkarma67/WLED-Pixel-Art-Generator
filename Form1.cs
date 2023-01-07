@@ -545,7 +545,8 @@ namespace WLED_Pixel_Art_Generator
                 brightText.Text = "";
                 return;
             }
-            _brightness = brightText.Text;
+            _brightness = Math.Clamp(int.Parse(brightText.Text), 0, 255).ToString();
+            brightText.Text = _brightness;
         }
 
         private void postBtn_Click(object sender, EventArgs e)
