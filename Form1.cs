@@ -8,7 +8,7 @@ namespace WLED_Pixel_Art_Generator
     public partial class Form1 : Form
     {
         public static Form1 Instance;
-        public string VersionNumber = "v1.0";
+        public string VersionNumber = "v1.0.2";
         private bool _presetSaved;
 
         private Bitmap _imageBitmap;
@@ -44,6 +44,7 @@ namespace WLED_Pixel_Art_Generator
 
             ShowPythonTab(_pythonTab);
             ShowPythonListTab(false);
+            ShowHassTab((_hassTab));
         }
 
         private void LoadData()
@@ -587,6 +588,7 @@ namespace WLED_Pixel_Art_Generator
             _hassTab = enableHomeAssistantToolStripMenuItem.Checked;
             _data.UseHass = _hassTab;
             AppDataUtil.SaveData(_data);
+            ShowHassTab(_hassTab);
 
         }
 

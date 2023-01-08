@@ -1,3 +1,6 @@
+v1.0.2 [release]
+- Fixed Home Assistant Tab displaying even if disabled.
+
 v1.0.1 [release]
 - Restricted Brightness level between 0-255.
 
